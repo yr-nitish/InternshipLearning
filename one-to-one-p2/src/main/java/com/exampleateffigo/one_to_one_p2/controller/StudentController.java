@@ -34,5 +34,13 @@ public class StudentController {
         return ResponseEntity.ok(savedStudent).getBody();
     }
 
+    @PutMapping("/{id}")
+    public Student updateStudent(@PathVariable int id, @RequestBody Student student) {
+        return ResponseEntity.ok(studentService.updateStudent(id, student)).getBody();
+    }
 
+    @DeleteMapping("/{id}")
+    public void deleteStudent(@PathVariable int id) {
+        studentService.deleteStudent(id);
+    }
 }

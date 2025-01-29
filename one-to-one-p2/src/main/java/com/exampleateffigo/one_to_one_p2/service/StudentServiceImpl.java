@@ -32,4 +32,17 @@ public class StudentServiceImpl implements StudentService{
         }
         return studentRepository.save(student);
     }
+
+    public Student updateStudent(int id, Student updatedStudent) {
+        return studentRepository.findById(id).map(student -> {
+            student.setStudentName(updatedStudent.getStudentName());
+            student.setStudentLocation(updatedStudent.getStudentLocation());
+            student.setProject(updatedStudent.getProject());
+            return studentRepository.save(student);
+        }).orElse(null);
+    }
+
+    public void deleteStudent(int id) {
+        studentRepository.deleteById(id);
+    }
 }

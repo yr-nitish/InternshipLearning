@@ -31,4 +31,17 @@ public class ProjectServiceImpl implements ProjectService{
         return projectRepository.save(project);
     }
 
+    public Project updateProject(int id, Project updatedProject) {
+        return projectRepository.findById(id).map(project -> {
+            project.setProjectTitle(updatedProject.getProjectTitle());
+            project.setProjectDomain(updatedProject.getProjectDomain());
+            project.setStudent(updatedProject.getStudent());
+            return projectRepository.save(project);
+        }).orElse(null);
+    }
+
+    public void deleteProject(int id) {
+        projectRepository.deleteById(id);
+    }
+
 }

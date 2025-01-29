@@ -10,4 +10,6 @@ public interface StudentService {
     List<Student> getAllStudents();
     Optional<Student> getStudentById(int id);
     Student addStudent(Student student);
+    Student updateStudent(int id, Student student);
+    void deleteStudent(int id);
 }

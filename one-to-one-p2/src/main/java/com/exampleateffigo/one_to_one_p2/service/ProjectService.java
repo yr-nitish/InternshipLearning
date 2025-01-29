@@ -12,4 +12,8 @@ public interface ProjectService {
     Optional<Project> getProjectById(int id);
 
     Project addProject(Project project);
+
+    Project updateProject(int id, Project project);
+
+    void deleteProject(int id);
 }
