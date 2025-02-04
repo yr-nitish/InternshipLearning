@@ -1,8 +1,11 @@
 package com.exampleateffigo.coursemanagement.service;
 
+import com.exampleateffigo.coursemanagement.dto.OrderRequestDTO;
+import com.exampleateffigo.coursemanagement.dto.OrderResponseDTO;
 import com.exampleateffigo.coursemanagement.entity.Orders;
 import com.exampleateffigo.coursemanagement.entity.Users;
 import com.exampleateffigo.coursemanagement.entity.Courses;
+import com.exampleateffigo.coursemanagement.mappers.OrderMapper;
 import com.exampleateffigo.coursemanagement.repository.CoursesRepository;
 import com.exampleateffigo.coursemanagement.repository.OrdersRepository;
 import com.exampleateffigo.coursemanagement.repository.UsersRepository;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdersService {
@@ -24,23 +28,48 @@ public class OrdersService {
     @Autowired
     private CoursesRepository coursesRepository;
 
-    public Orders createOrder(long userId, long courseId) {
-        Users user = usersRepository.findById(userId).orElseThrow(()  -> new RuntimeException("User not found"));
+    @Autowired
+    private OrderMapper orderMapper;
 
-        Courses course = coursesRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Course not found"));
+    public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+        Users user = usersRepository.findById(orderRequestDTO.getUserId())
+                .orElseThrow(()  -> new RuntimeException("User not found"));
+
+        Courses course = coursesRepository.findById(orderRequestDTO.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
 
         Orders order = new Orders();
         order.setUsers(user);
         order.setCourses(course);
-        return ordersRepository.save(order);
+
+        Orders savedOrder = ordersRepository.save(order);
+        return orderMapper.toDTO(savedOrder);
     }
 
-    public List<Orders> getAllOrders() {
-        return ordersRepository.findAll();
+//    public List<Orders> getAllOrders() {
+//        return ordersRepository.findAll();
+//    }
+
+    public List<OrderResponseDTO> getAllOrders() {
+        return ordersRepository.findAll().stream()
+                .map(orderMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Orders> getOrderById(long id)
-    {
-        return ordersRepository.findById(id);
+//    public Optional<Orders> getOrderById(long id)
+//    {
+//        return ordersRepository.findById(id);
+//    }
+
+    public OrderResponseDTO getOrderById(long id) {
+        Orders order = ordersRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        return orderMapper.toDTO(order);
+    }
+
+    public void deleteOrder(long id) {
+        Orders order = ordersRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        ordersRepository.delete(order);
     }
 }

@@ -1,6 +1,7 @@
 package com.exampleateffigo.coursemanagement.controller;
 
-import com.exampleateffigo.coursemanagement.dto.ReviewRequest;
+import com.exampleateffigo.coursemanagement.dto.ReviewRequestDTO;
+import com.exampleateffigo.coursemanagement.dto.ReviewResponseDTO;
 import com.exampleateffigo.coursemanagement.entity.Reviews;
 import com.exampleateffigo.coursemanagement.service.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,25 @@ public class ReviewsController {
     private ReviewsService reviewsService;
 
     @PostMapping
-    public ResponseEntity<Reviews> addReview(@RequestBody ReviewRequest request) {
-        Reviews review = reviewsService.addReview(request.getUserId(), request.getCourseId(), request.getRating(), request.getComment());
-        return ResponseEntity.ok(review);
+    public ResponseEntity<ReviewResponseDTO> addReview(@RequestBody ReviewRequestDTO request) {
+        ReviewResponseDTO reviewResponseDTO = reviewsService.addReview(request);
+        return ResponseEntity.ok(reviewResponseDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<Reviews>> getAllReviews() {
+    public ResponseEntity<List<ReviewResponseDTO>> getAllReviews() {
         return ResponseEntity.ok(reviewsService.getAllReviews());
     }
 
     @GetMapping("/{id}")
-    public Optional<Reviews> getReviewById(@PathVariable long id)
+    public ResponseEntity<ReviewResponseDTO> getReviewById(@PathVariable long id)
     {
-        return reviewsService.getReviewById(id);
+        return ResponseEntity.ok(reviewsService.getReviewById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteReview(@PathVariable long id) {
+        reviewsService.deleteReview(id);
+        return ResponseEntity.ok("Review deleted successfully.");
     }
 }

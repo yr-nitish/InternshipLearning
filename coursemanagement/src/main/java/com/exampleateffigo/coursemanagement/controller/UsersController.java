@@ -1,5 +1,7 @@
 package com.exampleateffigo.coursemanagement.controller;
 
+import com.exampleateffigo.coursemanagement.dto.UserRequestDTO;
+import com.exampleateffigo.coursemanagement.dto.UserResponseDTO;
 import com.exampleateffigo.coursemanagement.entity.Users;
 import com.exampleateffigo.coursemanagement.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,31 +19,33 @@ public class UsersController {
     private UsersService usersService;
 
     @PostMapping
-    public Users createUser(@RequestBody Users user) {
-        return usersService.createUser(user);
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
+        return ResponseEntity.ok(usersService.createUser(userRequestDTO));
     }
 
     @PostMapping("/enroll")
-    public ResponseEntity<String> enrollUserInCourse(@RequestBody Map<String, Long> request) {
+    public ResponseEntity<UserResponseDTO> enrollUserInCourse(@RequestBody Map<String, Long> request) {
         Long userId = request.get("userId");
         Long courseId = request.get("courseId");
 
-        usersService.enrollUserInCourse(userId, courseId);
-        return ResponseEntity.ok("User enrolled in course successfully.");
+        UserResponseDTO updatedUser = usersService.enrollUserInCourse(userId, courseId);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @GetMapping
-    public List<Users> getAllUsers() {
-        return usersService.getAllUsers();
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        return ResponseEntity.ok(usersService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public Users getUserById(@PathVariable long id) {
-        return usersService.getUserById(id);
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable long id)
+    {
+        return ResponseEntity.ok(usersService.getUserById(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable long id) {
         usersService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully.");
     }
 }

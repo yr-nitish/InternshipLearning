@@ -1,12 +1,14 @@
 package com.exampleateffigo.coursemanagement.controller;
 
+import com.exampleateffigo.coursemanagement.dto.CourseRequestDTO;
+import com.exampleateffigo.coursemanagement.dto.CourseResponseDTO;
 import com.exampleateffigo.coursemanagement.entity.Courses;
 import com.exampleateffigo.coursemanagement.service.CoursesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/courses")
@@ -16,25 +18,26 @@ public class CoursesController {
     private CoursesService coursesService;
 
     @GetMapping
-    public List<Courses> getAllCourses()
+    public ResponseEntity<List<CourseResponseDTO>> getAllCourses()
     {
-        return coursesService.getAllCourses();
+        return ResponseEntity.ok(coursesService.getAllCourses());
     }
 
     @GetMapping("/{id}")
-    public Optional<Courses> getCourseById(@PathVariable long id)
+    public ResponseEntity<CourseResponseDTO> getCourseById(@PathVariable long id)
     {
-        return coursesService.getCourseById(id);
+        CourseResponseDTO courseResponseDTO = coursesService.getCourseById(id);
+        return ResponseEntity.ok(courseResponseDTO);
     }
 
     @PostMapping
-    public Courses createCourse(@RequestBody Courses course) {
-        return coursesService.createCourse(course);
+    public ResponseEntity<CourseResponseDTO> createCourse(@RequestBody CourseRequestDTO courseRequestDTO) {
+        return ResponseEntity.ok(coursesService.createCourse(courseRequestDTO));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable long id) {
+    public ResponseEntity<String> deleteCourse(@PathVariable long id) {
         coursesService.deleteCourse(id);
+        return ResponseEntity.ok("User  deleted successfully.");
     }
-
 }
