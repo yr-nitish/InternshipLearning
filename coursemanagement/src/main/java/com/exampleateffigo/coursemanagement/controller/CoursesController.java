@@ -17,27 +17,27 @@ public class CoursesController {
     @Autowired
     private CoursesService coursesService;
 
-    @GetMapping
+    @GetMapping("/get-all-courses")
     public ResponseEntity<List<CourseResponseDTO>> getAllCourses()
     {
         return ResponseEntity.ok(coursesService.getAllCourses());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get-course/{id}")
     public ResponseEntity<CourseResponseDTO> getCourseById(@PathVariable long id)
     {
         CourseResponseDTO courseResponseDTO = coursesService.getCourseById(id);
         return ResponseEntity.ok(courseResponseDTO);
     }
 
-    @PostMapping
+    @PostMapping("/add-course")
     public ResponseEntity<CourseResponseDTO> createCourse(@RequestBody CourseRequestDTO courseRequestDTO) {
         return ResponseEntity.ok(coursesService.createCourse(courseRequestDTO));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete-course/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable long id) {
         coursesService.deleteCourse(id);
-        return ResponseEntity.ok("User  deleted successfully.");
+        return ResponseEntity.ok("Course  deleted successfully.");
     }
 }

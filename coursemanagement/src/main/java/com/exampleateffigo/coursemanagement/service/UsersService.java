@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UsersService
 {
-
     private Logger logger = LoggerFactory.getLogger(UsersService.class);
 
     @Autowired
