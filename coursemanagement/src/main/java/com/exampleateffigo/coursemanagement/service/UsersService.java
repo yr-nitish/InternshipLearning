@@ -95,4 +95,26 @@ public class UsersService
         usersRepository.deleteById(id);
         logger.info("User with ID: {} deleted successfully", id);
     }
+
+    public UserResponseDTO updateUserEmail(long id, String newEmail) {
+        logger.info("Updating email for user with ID: {}", id);
+        Users user = usersRepository.findById(id).orElseThrow(() -> {
+            logger.error("User not found with ID: {}", id);
+            return new RuntimeException("User not found");
+        });
+
+        user.setUserEmail(newEmail);
+        Users updatedUser = usersRepository.save(user);
+        logger.info("User email updated successfully for ID: {}", id);
+        return userMapper.toResponseDTO(updatedUser);
+    }
+
+    public List<UserResponseDTO> getAllEnrollments() {
+        List<Users> users = usersRepository.findAllEnrollments();
+
+        return users.stream()
+                .filter(user -> !user.getEnrolledCourses().isEmpty()) // Only return users who have enrolled
+                .map(user -> new UserResponseDTO(user.getUserId(), user.getUserName(), user.getUserEmail()))
+                .collect(Collectors.toList());
+    }
 }

@@ -66,4 +66,12 @@ public class ReviewsService {
                 .orElseThrow(() -> new RuntimeException("Review not found"));
         return reviewMapper.toDTO(reviews);
     }
+
+    public ReviewResponseDTO updateReview(long id, ReviewRequestDTO reviewRequestDTO) {
+        Reviews existingReview = reviewsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+        existingReview.setRating(reviewRequestDTO.getRating());
+        existingReview.setComment(reviewRequestDTO.getComment());
+        return reviewMapper.toDTO(reviewsRepository.save(existingReview));
+    }
 }

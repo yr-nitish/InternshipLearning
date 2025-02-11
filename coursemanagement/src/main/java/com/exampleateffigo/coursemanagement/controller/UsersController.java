@@ -43,9 +43,21 @@ public class UsersController {
         return ResponseEntity.ok(usersService.getUserById(id));
     }
 
+    @PatchMapping("/update-email/{id}")
+    public ResponseEntity<UserResponseDTO> updateUserEmail(@PathVariable long id, @RequestBody Map<String, String> request) {
+        String newEmail = request.get("userEmail");
+        return ResponseEntity.ok(usersService.updateUserEmail(id, newEmail));
+    }
+
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable long id) {
         usersService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully.");
+    }
+
+    @GetMapping("/enrollments")
+    public ResponseEntity<List<UserResponseDTO>> getAllEnrollments() {
+        List<UserResponseDTO> enrolledUsers = usersService.getAllEnrollments();
+        return ResponseEntity.ok(enrolledUsers);
     }
 }
