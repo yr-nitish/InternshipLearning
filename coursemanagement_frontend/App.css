@@ -1,0 +1,12 @@
+.custom-dropdown {
+  background-color: rgb(29, 30, 39) !important; /* Dark dropdown background */
+}
+
+.custom-dropdown .dropdown-item {
+  color: white !important;
+}
+
+.custom-dropdown .dropdown-item:hover {
+  background-color: #444 !important; /* Slightly lighter hover effect */
+  color: white !important; /* Ensure text remains readable */
+}

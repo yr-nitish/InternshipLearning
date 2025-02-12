@@ -1,0 +1,22 @@
+/* Dropdown Background */
+.custom-dropdown {
+    background-color: #fff; /* White Background */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 0;
+  }
+  
+  /* Dropdown Items */
+  .custom-dropdown .dropdown-item {
+    color: #333 !important; /* Default Dark Text */
+    padding: 10px 15px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Hover Effect: Change text to black and background to light gray */
+  .custom-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa; /* Light Gray Background */
+    color: black !important; /* Ensure Text Turns Black */
+    font-weight: 600;
+  }
+  

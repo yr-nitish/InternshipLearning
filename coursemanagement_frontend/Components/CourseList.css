@@ -1,0 +1,69 @@
+/* CourseList.css */
+
+/* Container styling */
+.course-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Heading styling */
+.course-container h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* List styling */
+.course-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Course item styling */
+.course-item {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    transition: all 0.3s ease-in-out;
+    text-align: left;
+}
+
+/* Course details styling */
+.course-item h2 {
+    color: #007bff;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.course-item h4 {
+    color: #555;
+    font-size: 16px;
+    margin: 3px 0;
+}
+
+/* Hover effect */
+.course-item:hover {
+    background: #007bff;
+    color: white;
+    transform: scale(1.02);
+}
+
+.course-item:hover h2,
+.course-item:hover h4 {
+    color: white;
+}
+
+/* Loading message */
+.loading-message {
+    font-style: italic;
+    color: #777;
+    font-size: 18px;
+}
