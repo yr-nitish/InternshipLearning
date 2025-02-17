@@ -12,36 +12,36 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping
 public class ReviewsController {
 
     @Autowired
     private ReviewsService reviewsService;
 
-    @PostMapping("/add-review")
+    @PostMapping("/auth/user/api/reviews/add-review")
     public ResponseEntity<ReviewResponseDTO> addReview(@RequestBody ReviewRequestDTO request) {
         ReviewResponseDTO reviewResponseDTO = reviewsService.addReview(request);
         return ResponseEntity.ok(reviewResponseDTO);
     }
 
-    @GetMapping("/get-all-reviews")
+    @GetMapping({"/auth/admin/api/reviews/get-all-reviews", "/auth/user/api/reviews/get-all-reviews"})
     public ResponseEntity<List<ReviewResponseDTO>> getAllReviews() {
         return ResponseEntity.ok(reviewsService.getAllReviews());
     }
 
-    @GetMapping("/get-review/{id}")
+    @GetMapping("/auth/admin/api/reviews/get-review/{id}")
     public ResponseEntity<ReviewResponseDTO> getReviewById(@PathVariable long id)
     {
         return ResponseEntity.ok(reviewsService.getReviewById(id));
     }
 
-    @PutMapping("/update-review/{id}")
+    @PutMapping("/auth/user/api/reviews/update-review/{id}")
     public ResponseEntity<ReviewResponseDTO> updateReview(@PathVariable long id, @RequestBody ReviewRequestDTO reviewRequestDTO)
     {
         return ResponseEntity.ok(reviewsService.updateReview(id, reviewRequestDTO));
     }
 
-    @DeleteMapping("/delete-review/{id}")
+    @DeleteMapping("/auth/admin/api/reviews/delete-review/{id}")
     public ResponseEntity<String> deleteReview(@PathVariable long id) {
         reviewsService.deleteReview(id);
         return ResponseEntity.ok("Review deleted successfully.");

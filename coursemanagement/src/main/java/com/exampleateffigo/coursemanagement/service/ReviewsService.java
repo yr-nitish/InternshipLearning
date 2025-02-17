@@ -31,7 +31,6 @@ public class ReviewsService {
     @Autowired
     private ReviewMapper reviewMapper;
 
-
     public ReviewResponseDTO addReview(ReviewRequestDTO reviewRequestDTO) {
 
         Users user = usersRepository.findById(reviewRequestDTO.getUserId())

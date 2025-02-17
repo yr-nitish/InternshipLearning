@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping
 public class OrdersControllers {
 
     @Autowired
     private OrdersService ordersService;
 
-    @PostMapping("/place-order")
+    @PostMapping("/auth/user/api/orders/place-order")
     public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO request) {
         OrderResponseDTO orderResponse = ordersService.createOrder(request);
         return ResponseEntity.ok(orderResponse);
@@ -29,18 +29,18 @@ public class OrdersControllers {
 //        return ResponseEntity.ok(orders);
 //    }
 
-    @GetMapping("/get-all-orders")
+    @GetMapping("/auth/admin/api/orders/get-all-orders")
     public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
         List<OrderResponseDTO> orders = ordersService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping("/get-order/{id}")
+    @GetMapping("/auth/admin/api/orders/get-order/{id}")
     public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable long id) {
         return ResponseEntity.ok(ordersService.getOrderById(id));
     }
 
-    @DeleteMapping("/delete-order/{id}")
+    @DeleteMapping("/auth/admin/api/orders/delete-order/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable long id) {
         ordersService.deleteOrder(id);
         return ResponseEntity.noContent().build();

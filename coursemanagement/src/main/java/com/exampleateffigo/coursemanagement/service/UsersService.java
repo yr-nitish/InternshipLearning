@@ -1,5 +1,4 @@
 package com.exampleateffigo.coursemanagement.service;
-
 import com.exampleateffigo.coursemanagement.dto.UserRequestDTO;
 import com.exampleateffigo.coursemanagement.dto.UserResponseDTO;
 import com.exampleateffigo.coursemanagement.entity.Courses;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,12 +109,17 @@ public class UsersService
         return userMapper.toResponseDTO(updatedUser);
     }
 
-    public List<UserResponseDTO> getAllEnrollments() {
-        List<Users> users = usersRepository.findAllEnrollments();
+    public List<Map<String, Object>> getAllEnrollments() {
+        return usersRepository.findUserEnrollments();
+    }
 
-        return users.stream()
-                .filter(user -> !user.getEnrolledCourses().isEmpty()) // Only return users who have enrolled
-                .map(user -> new UserResponseDTO(user.getUserId(), user.getUserName(), user.getUserEmail()))
-                .collect(Collectors.toList());
+    public UserResponseDTO getUserByName(String userName) {
+        logger.info("Fetching user with name: {}", userName);
+        Users user = usersRepository.findByUserName(userName).orElseThrow(() ->
+        {
+            logger.error("User not found with name: {}", userName);
+            return new RuntimeException("User not found");
+        });
+        return userMapper.toResponseDTO(user);
     }
 }
