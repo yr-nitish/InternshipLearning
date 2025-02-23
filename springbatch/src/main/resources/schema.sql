@@ -8,6 +8,18 @@
 --    version FLOAT
 --);
 
+CREATE TABLE IF NOT EXISTS failed_records (
+    id1 BIGSERIAL PRIMARY KEY,
+
+    id VARCHAR(255),
+    name VARCHAR(255),
+    language VARCHAR(255),
+    bio TEXT,
+    version FLOAT,
+    error_message TEXT
+);
+
+
 -- Table for storing job instances
 CREATE TABLE IF NOT EXISTS BATCH_JOB_INSTANCE (
     JOB_INSTANCE_ID BIGSERIAL PRIMARY KEY,

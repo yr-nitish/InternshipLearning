@@ -1,6 +1,7 @@
 package com.ateffigo.springbatch.config;
 
 import com.ateffigo.springbatch.entity.Student;
+import com.ateffigo.springbatch.listener.StudentSkipListener;
 import com.ateffigo.springbatch.repository.StudentRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -28,8 +29,12 @@ public class SpringBatchConfig {
     private final StudentRepository studentRepository;
 
     @Autowired
-    public SpringBatchConfig(StudentRepository studentRepository) {
+    private final StudentSkipListener studentSkipListener;
+
+    @Autowired
+    public SpringBatchConfig(StudentRepository studentRepository, StudentSkipListener studentSkipListener) {
         this.studentRepository = studentRepository;
+        this.studentSkipListener = studentSkipListener;
     }
 
     @Bean
@@ -39,6 +44,7 @@ public class SpringBatchConfig {
         jsonItemReader.setJsonObjectReader(jsonObjectReader);
         jsonItemReader.setResource(new ClassPathResource("dummyjson.json"));
         jsonItemReader.setName("reader");
+        jsonItemReader.setStrict(false);
         return jsonItemReader;
     }
 
@@ -58,10 +64,14 @@ public class SpringBatchConfig {
     @Bean
     public Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder("jsonStep", jobRepository)
-                .<Student, Student>chunk(100, transactionManager) // Adjust chunk size as needed
+                .<Student, Student>chunk(10, transactionManager)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
+                .faultTolerant()
+                .skip(Exception.class)
+                .skipLimit(500)
+                .listener(studentSkipListener)
                 .build();
     }
 
