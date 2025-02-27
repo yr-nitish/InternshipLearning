@@ -28,6 +28,12 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
+    public List<Student> getStudentById(String id) {
+        return studentRepository.findByStudentId(id);
+    }
+
+
+
     public String uploadJsonFile() {
         try {
             StopWatch stopWatch = new StopWatch();

@@ -14,6 +14,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id1;
+    @Column(nullable = false)
     private String id;
     private String name;
     private String language;
