@@ -15,10 +15,21 @@ public class StudentService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static String url="http://localhost:8081/students/get-all";
+    private static final String ALL_STUDENTS_URL="http://localhost:8081/students/get-all";
+
+    private static final String STUDENT_BY_ID_URL = "http://localhost:8081/students/get-by-id/{id}";
 
     public List<StudentDTO> fetchAllStudents(){
-        ResponseEntity<StudentDTO[]> response = restTemplate.getForEntity(url, StudentDTO[].class);
+        ResponseEntity<StudentDTO[]> response = restTemplate.getForEntity(ALL_STUDENTS_URL, StudentDTO[].class);
+
+        System.out.println("Raw Response: " + response);
+        System.out.println("Body: " + Arrays.toString(response.getBody()));
+
+        return Arrays.asList(response.getBody());
+    }
+
+    public List<StudentDTO> fetchStudentById(String id) {
+        ResponseEntity<StudentDTO[]> response = restTemplate.getForEntity(STUDENT_BY_ID_URL, StudentDTO[].class, id);
 
         System.out.println("Raw Response: " + response);
         System.out.println("Body: " + Arrays.toString(response.getBody()));
