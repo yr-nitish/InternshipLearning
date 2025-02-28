@@ -19,11 +19,13 @@ public class StudentService {
 
     private static final String STUDENT_BY_ID_URL = "http://localhost:8081/students/get-by-id/{id}";
 
+    private static final String STUDENT_BY_LANG_URL = "http://localhost:8081/students/language/{lang}";
+
     public List<StudentDTO> fetchAllStudents(){
         ResponseEntity<StudentDTO[]> response = restTemplate.getForEntity(ALL_STUDENTS_URL, StudentDTO[].class);
 
         System.out.println("Raw Response: " + response);
-        System.out.println("Body: " + Arrays.toString(response.getBody()));
+//        System.out.println("Body: " + Arrays.toString(response.getBody()));
 
         return Arrays.asList(response.getBody());
     }
@@ -33,6 +35,12 @@ public class StudentService {
 
         System.out.println("Raw Response: " + response);
         System.out.println("Body: " + Arrays.toString(response.getBody()));
+
+        return Arrays.asList(response.getBody());
+    }
+
+    public List<StudentDTO> fetchByLanguage(String lang) {
+        ResponseEntity<StudentDTO[]> response = restTemplate.getForEntity(STUDENT_BY_LANG_URL, StudentDTO[].class, lang);
 
         return Arrays.asList(response.getBody());
     }

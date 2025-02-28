@@ -12,5 +12,4 @@ public class StudentDTO {
     private String id;
     private String name;
     private String language;
-    private double version;
 }

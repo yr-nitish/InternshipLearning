@@ -26,4 +26,9 @@ public class ClientController {
     public List<StudentDTO> getStudentById(@PathVariable String id){
         return studentService.fetchStudentById(id);
     }
+
+    @GetMapping("/students/language/{lang}")
+    public List<StudentDTO> getStudentByLanguage(@PathVariable String lang){
+        return studentService.fetchByLanguage(lang);
+    }
 }
