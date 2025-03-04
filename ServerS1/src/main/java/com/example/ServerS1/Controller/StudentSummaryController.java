@@ -1,6 +1,6 @@
 package com.example.ServerS1.Controller;
 
-import com.example.ServerS1.Entity.StudentSummary;
+import com.example.ServerS1.Entity.StudentSummaryViewEntity;
 import com.example.ServerS1.Service.StudentSummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class StudentSummaryController {
     private StudentSummaryService studentSummaryService;
 
     @GetMapping("/language/{lang}")
-    public ResponseEntity<List<StudentSummary>> getStudentByLanguage(@PathVariable String lang){
+    public ResponseEntity<List<StudentSummaryViewEntity>> getStudentByLanguage(@PathVariable String lang){
         return ResponseEntity.ok(studentSummaryService.getStudentByLanguage(lang));
     }
 }
