@@ -40,6 +40,12 @@ public class UserController {
         return "Cache evicted for user ID:" +id;
     }
 
+    @DeleteMapping("/clear-all")
+    public String clearCache(){
+        userService.clearCache();
+        return "Cache cleared";
+    }
+
     @GetMapping("/{id}/isCached")
     public boolean isUserCached(@PathVariable long id) {
         boolean cached = userService.isUserInCache(id);

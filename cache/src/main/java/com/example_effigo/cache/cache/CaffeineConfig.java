@@ -10,13 +10,13 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.concurrent.TimeUnit;
 
 
-@Configuration
-@EnableCaching
+//@Configuration
+//@EnableCaching
 public class CaffeineConfig {
 
     @Bean
     public CacheManager caffeineCacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager(); // Define your cache names here
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("users");
         cacheManager.setCaffeine(caffeineCacheBuilder());
         return cacheManager;
     }

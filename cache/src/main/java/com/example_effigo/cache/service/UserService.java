@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class UserService {
         this.cacheManager = cacheManager;
     }
 
-    @Cacheable(value = "users", key = "#id")
+    @Cacheable(value = "cached_users", key = "#id")
     public Optional<User> getUserById(long id) {
         logger.info("Fetching user from DB: {}", id);
         return userRepository.findById(id);
@@ -37,8 +38,14 @@ public class UserService {
         logger.info("User removed from Cache: {}", id);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
+    public void clearCache() {
+        logger.info("Clearing users cache");
+    }
+
+    @CachePut(value = "users", key = "#user.id")
     public User saveUser(User user) {
-        logger.info("Saving user to DB: {}", user);
+        logger.info("Saving user to DB and updating cache: {}", user);
         return userRepository.save(user);
     }
 
