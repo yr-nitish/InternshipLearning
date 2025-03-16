@@ -5,34 +5,81 @@ import com.example.ServerS1.Repository.StudentRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Data
 @Service
+@EnableCaching
 public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ObjectMapper objectMapper;
+    private final CacheManager cacheManager;
 
-    public StudentService(StudentRepository studentRepository, ObjectMapper objectMapper) {
+    @Autowired
+    public StudentService(StudentRepository studentRepository, ObjectMapper objectMapper, CacheManager cacheManager) {
         this.studentRepository = studentRepository;
         this.objectMapper = objectMapper;
+        this.cacheManager = cacheManager;
     }
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
+    @Cacheable(value = "cached_data", key = "#id")
     public List<Student> getStudentById(String id) {
         return studentRepository.findByStudentId(id);
     }
 
+    @CacheEvict(value = "cached_data", allEntries = true)
+    public void clearCache() {
+        log.info("Clearing users cache");
+    }
 
+    public boolean isUserInCache(String id) {
+        Cache cache = cacheManager.getCache("cached_data");
+        if (cache == null) {
+            return false;
+        }
+        return cache.get(id) != null;
+    }
+
+    public Map<String, Object> getCachedData() {
+        Cache cache = cacheManager.getCache("cached_data");
+        if (cache == null) {
+            return Map.of("message", "Cache is empty or not found");
+        }
+
+        if (cache instanceof ConcurrentMapCache) {
+            ConcurrentMapCache concurrentCache = (ConcurrentMapCache) cache;
+            Map<Object, Object> nativeCache = concurrentCache.getNativeCache();
+
+            return nativeCache.entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().toString(),
+                            Map.Entry::getValue
+                    ));
+        }
+
+        return Map.of("message", "Cache type not supported");
+    }
 
     public String uploadJsonFile() {
         try {
